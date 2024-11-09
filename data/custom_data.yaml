@@ -4,7 +4,7 @@ val: ./data/valid  # 5000 images
 test: ./data/test  # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794
 
 # number of classes
-nc: 4
+nc: 6
 
 # class names
-names: [ 'alucan', 'glass', 'hdpe', 'pet']
+names: ['Cardboard', 'Glass', 'Metal', 'Paper', 'Plastic', 'Trash']
