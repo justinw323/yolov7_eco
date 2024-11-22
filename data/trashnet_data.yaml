@@ -3,4 +3,4 @@ val: ./data/trashnet_valid
 test: ./data/trashnet_test
 
 nc: 6
-names: ['Cardboard', 'Glass', 'Metal', 'Paper', 'Plastic', 'Trash']
+names: ['Cardboard', 'Glass', 'Metal', 'Paper', 'Plastic']
