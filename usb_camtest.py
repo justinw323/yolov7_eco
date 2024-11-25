@@ -1,3 +1,6 @@
+# https://developer.ridgerun.com/wiki/index.php/How_to_Capture_Frames_from_Camera_with_OpenCV_in_Python
+# ^ code from here
+
 import cv2
 
 # Open the device at the ID 0
@@ -22,6 +25,7 @@ while(True):
     
     cv2.imshow("preview",frame)
     
+    # Uncomment this line if you want a jpg to be a webcam
     # cv2.imwrite("outputImage.jpg", frame)
 
     #Waits for a user input to quit the application
