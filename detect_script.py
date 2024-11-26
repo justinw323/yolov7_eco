@@ -67,9 +67,10 @@ def detect(image_path, save_img=False):
     t0 = time.time()
             
     recycleable = True
+    label = ""
 
     for path, img, im0s, vid_cap in dataset:
-        print(path)
+        print("Starting detection on image", path)
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
         img /= 255.0  # 0 - 255 to 0.0 - 1.0
@@ -110,29 +111,39 @@ def detect(image_path, save_img=False):
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
                     recycleable = recycleable and (int(cls) in [0,1,2,3,4] and float(conf) > 0.6)
-                    print("cls, conf", f'{names[int(cls)]} {conf:.2f}')
+                    print("Detected cls", f'{names[int(cls)]}', "with conf", f'{conf:.2f}')
+                    if label == "":
+                        label = names[int(cls)]
 
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
-            if recycleable:
-                print("recycleable", recycleable)
-            else:
-                print("not recycleable", recycleable)
+    if label == "":
+        label = "Trash"
+        recycleable = False
+        print("No recycling detected")
     print(f'Done. ({time.time() - t0:.3f}s)')
-    return recycleable
+    if not recycleable:
+        label = "Trash"
+    return label, recycleable
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--source', type=str, default='capture.jpg', help='source')  # file/folder, 0 for webcam
+    opt = parser.parse_args()
     #check_requirements(exclude=('pycocotools', 'thop'))
 
     with torch.no_grad():
-        output = detect("data/trashnet_test/images/metal153_jpg.rf.3009fa8073f8f28688e8b3f08381d60d.jpg")
+        output = detect(opt.source)
         # output = detect(some path here)
-        print("output =", output)
+        print("Classification:", output[0], "\tisRecycleable:", output[1])
 
-'''
+'''zzzzzzzzzzzzzzz
 python3 detect.py --weights trashnet50best.pt --conf 0.25 --img-size 640 --source data/trashnet_test/images/metal153_jpg.rf.3009fa8073f8f28688e8b3f08381d60d.jpg --device=0
+python3 detect.py --weights trashnet50best.pt --conf 0.25 --img-size 640 --source capture.jpg --device=0
 python3 detect_script.py
+python3 detect_script.py --source plastic_demo.jpg
+python3 detect_script.py --source trash_demo.jpg
 '''
 
 '''

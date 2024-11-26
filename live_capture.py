@@ -44,7 +44,7 @@ def gstreamer_pipeline(
 
 
 def show_camera():
-    window_title = "CSI Camera"
+    # window_title = "CSI Camera"
 
     try:        # remove previous picture if it still exists
         os.remove("capture.jpg")
@@ -58,27 +58,16 @@ def show_camera():
     if video_capture.isOpened():
         try:
             i = 0
-            window_handle = cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
+            # window_handle = cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
             while True:
                 ret_val, frame = video_capture.read()
                 i += 1
                 print(i)
-                if i == 150:        # camera feed is orange for a bit, wait a bit for it to fix itself before capturing image
+                if i == 50:        # camera feed is orange for a bit, wait a bit for it to fix itself before capturing image
                     cv2.imwrite("capture.jpg", frame)       # save current frame as jpg
-                # Check to see if the user closed the window
-                # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
-                # GTK - Substitute WND_PROP_AUTOSIZE to detect if window has been closed by user
-                if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
-                    cv2.imshow(window_title, frame)
-                else:
-                    break 
-                keyCode = cv2.waitKey(10) & 0xFF
-                # Stop the program on the ESC key or 'q'
-                if keyCode == 27 or keyCode == ord('q'):
-                    break
+                    return
         finally:
             video_capture.release()
-            cv2.destroyAllWindows()
     else:
         print("Error: Unable to open camera")
         # Try this command:
