@@ -26,7 +26,7 @@ while(True):
     cv2.imshow("preview",frame)
     
     # Uncomment this line if you want a jpg to be a webcam
-    # cv2.imwrite("outputImage.jpg", frame)
+    cv2.imwrite("outputImage.jpg", frame)
 
     #Waits for a user input to quit the application
     if cv2.waitKey(1) & 0xFF == ord('q'):

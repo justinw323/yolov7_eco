@@ -20,6 +20,9 @@ if not (cam.isOpened()):
 cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 640)
 
+time.sleep(0.1)
+arduino.read_all()
+
 while not done:
 	data = arduino.readline()
 	if data:
@@ -29,7 +32,7 @@ while not done:
 			cv2.imwrite("capture.jpg", frame)
 			# capture.show_camera()
 			# os.system("gst-launch-1.0 nvarguscamerasrc num-buffers=1 sensor_id=0 ! 'video/x-raw(memory:NVMM), width=4608, height=2592, framerate=14/1, format=NV12' ! nvjpegenc ! filesink location=image.jpg")
-			label, isRecyclable = script.detect("capture.jpg")
+			label, isRecyclable = "label", 0 #script.detect("capture.jpg")
 			arduino.write(str(int(isRecyclable)).encode())
 			arduino.flush()
 			done = True
